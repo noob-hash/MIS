@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -31,14 +33,17 @@ public class Sales {
     private Long saleId;
 
     @Column(nullable = false)
-    private LocalDate date;
+    private LocalDate salesDate;
 
     @Column(nullable = false)
     private Long customerId;
     // @Lazy
     // private User customerId;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    // @OneToMany(cascade = CascadeType.ALL, mappedBy = "items_id")
+    // private List<SalesItem> items;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sales")
     private List<SalesItem> items;
 
     @Column(nullable = false)

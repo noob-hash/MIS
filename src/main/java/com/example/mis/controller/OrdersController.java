@@ -13,47 +13,47 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.mis.entity.Order;
-import com.example.mis.service.OrderService;
+import com.example.mis.entity.Orders;
+import com.example.mis.service.OrdersService;
 
 @RestController
 @RequestMapping("/mis/order")
-public class OrderController {
+public class OrdersController {
     @Autowired
-    private OrderService orderService;
+    private OrdersService orderService;
 
     @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrder();
+    public List<Orders> getAllOrderss() {
+        return orderService.getAllOrders();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id)
+    public ResponseEntity<Orders> getOrdersById(@PathVariable Long id) {
+        return orderService.getOrdersById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
-        return orderService.createOrUpdateOrder(order);
+    public Orders createOrders(@RequestBody Orders order) {
+        return orderService.createOrUpdateOrders(order);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Order> updateOrder(@PathVariable Long id, @RequestBody Order order) {
-        return orderService.getOrderById(id)
-                .map(existingOrder -> {
-                    order.setId(existingOrder.getId()); // Assuming the Order entity has an "id" field
-                    Order updatedOrder = orderService.createOrUpdateOrder(order);
-                    return ResponseEntity.ok(updatedOrder);
+    public ResponseEntity<Orders> updateOrders(@PathVariable Long id, @RequestBody Orders order) {
+        return orderService.getOrdersById(id)
+                .map(existingOrders -> {
+                    order.setId(existingOrders.getId()); // Assuming the Orders entity has an "id" field
+                    Orders updatedOrders = orderService.createOrUpdateOrders(order);
+                    return ResponseEntity.ok(updatedOrders);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
-        if (orderService.getOrderById(id).isPresent()) {
-            orderService.deleteOrder(id);
+    public ResponseEntity<Void> deleteOrders(@PathVariable Long id) {
+        if (orderService.getOrdersById(id).isPresent()) {
+            orderService.deleteOrders(id);
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();

@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.mis.entity.User;
+import com.example.mis.entity.UsersDetails;
 import com.example.mis.repo.UserRepo;
 
 @Service
@@ -21,7 +21,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        User user = userRepository.findByUsername(username)
+        UsersDetails user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return new org.springframework.security.core.userdetails.User(
@@ -32,20 +32,20 @@ public class UserService implements UserDetailsService {
                         .collect(Collectors.toList()));
     }
 
-    public List<User> getAllUsers() {
+    public List<UsersDetails> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public User getUserById(Long id) {
+    public UsersDetails getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    public User saveUser(User user) {
+    public UsersDetails saveUser(UsersDetails user) {
         return userRepository.save(user);
     }
 
-    public User updateUser(Long userId, User updatedUser) {
-        User user = userRepository.findById(userId).orElse(null);
+    public UsersDetails updateUser(Long userId, UsersDetails updatedUser) {
+        UsersDetails user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             return userRepository.save(updatedUser);
         } else {

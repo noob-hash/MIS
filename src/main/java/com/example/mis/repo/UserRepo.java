@@ -6,14 +6,14 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.mis.entity.User;
+import com.example.mis.entity.UsersDetails;
 
 @Repository
-public interface UserRepo extends JpaRepository<User, Long> {
+public interface UserRepo extends JpaRepository<UsersDetails, Long> {
 
-    public Optional<User> findByUsername(String username);
+    public Optional<UsersDetails> findByUsername(String username);
 
-    public List<User> findByRole(String role);
+    public List<UsersDetails> findByRoles(String role);
 
-    public User findByUsernameAndRole(String username, String role);
+    public UsersDetails findByUsernameAndRoles(String username, String role);
 }

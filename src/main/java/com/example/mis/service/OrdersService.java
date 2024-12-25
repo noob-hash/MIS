@@ -6,27 +6,27 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.mis.entity.Order;
-import com.example.mis.repo.OrderRepo;
+import com.example.mis.entity.Orders;
+import com.example.mis.repo.OrdersRepo;
 
 @Service
-public class OrderService {
+public class OrdersService {
     @Autowired
-    private OrderRepo orderRepository;
+    private OrdersRepo orderRepository;
 
-    public List<Order> getAllOrder() {
+    public List<Orders> getAllOrders() {
         return orderRepository.findAll();
     }
 
-    public Optional<Order> getOrderById(Long saleId) {
+    public Optional<Orders> getOrdersById(Long saleId) {
         return orderRepository.findById(saleId);
     }
 
-    public Order createOrUpdateOrder(Order order) {
+    public Orders createOrUpdateOrders(Orders order) {
         return orderRepository.save(order);
     }
 
-    public void deleteOrder(Long saleId) {
+    public void deleteOrders(Long saleId) {
         orderRepository.deleteById(saleId);
     }
 }

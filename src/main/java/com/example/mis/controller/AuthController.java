@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.mis.dto.LoginDto;
-import com.example.mis.entity.User;
+import com.example.mis.entity.UsersDetails;
 import com.example.mis.service.UserService;
 
 @RestController
@@ -18,15 +18,15 @@ public class AuthController {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public User login(LoginDto loginDto) {
-        User profile = (User) userService.loadUserByUsername(loginDto.getUsername());
+    public UsersDetails login(LoginDto loginDto) {
+        UsersDetails profile = (UsersDetails) userService.loadUserByUsername(loginDto.getUsername());
         if (passwordEncoder.matches(loginDto.getPassword(), profile.getPassword())) {
             return profile;
         }
         return null;
     }
 
-    public User register(User userData) {
+    public UsersDetails register(UsersDetails userData) {
         String hashedPassword = passwordEncoder.encode(userData.getPassword());
         userData.setPassword(hashedPassword);
         return userService.saveUser(userData);

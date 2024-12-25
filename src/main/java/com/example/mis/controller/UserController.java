@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.mis.entity.User;
+import com.example.mis.entity.UsersDetails;
 import com.example.mis.service.UserService;
 
 @RestController
@@ -23,22 +23,22 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UsersDetails> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
+    public UsersDetails getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
     @PostMapping
-    public User createUser(@PathVariable Long id, @RequestBody User user) {
+    public UsersDetails createUser(@PathVariable Long id, @RequestBody UsersDetails user) {
         return userService.updateUser(id,user);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+    public UsersDetails updateUser(@PathVariable Long id, @RequestBody UsersDetails user) {
         return userService.getUserById(id);
     }
 

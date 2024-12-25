@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Order {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,12 +37,15 @@ public class Order {
     // private User supplierId;
 
     @Column(nullable = false)
-    private LocalDate date;
+    private LocalDate orderDate;
 
     @Column(nullable = false)
     private String status;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    // @OneToMany(cascade = CascadeType.ALL, mappedBy = "sales")
+    // private List<OrderItem> items;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderItem> items;
 
     private Double totalAmount;
