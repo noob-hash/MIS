@@ -1,8 +1,10 @@
 package com.example.mis.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +13,9 @@ import com.example.mis.dto.InventoryRequest;
 import com.example.mis.entity.CustomFormData;
 import com.example.mis.entity.Inventory;
 import com.example.mis.entity.Inventory.ProductType;
+import com.example.mis.entity.InventoryHistory;
 import com.example.mis.repo.CustomFormRepo;
+import com.example.mis.repo.InventoryHistoryRepo;
 import com.example.mis.repo.InventoryRepo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -25,6 +29,9 @@ public class InventoryService {
 
     @Autowired
     private CustomFormRepo customFormRepo;
+
+    @Autowired
+    private InventoryHistoryRepo historyRepo;
 
     @Autowired
     private ObjectMapper objectMapper; // Injected ObjectMapper
@@ -177,4 +184,36 @@ public class InventoryService {
         }
         return saveInventory(updatedInventory);
     }
+
+    // Helper method to track inventory changes
+    private void trackInventoryChange(Inventory oldInventory, Inventory newInventory, String action,
+            String modifiedBy) {
+        InventoryHistory history = new InventoryHistory();
+        history.setInventory(newInventory);
+        history.setAction(action);
+        history.setPreviousStock(oldInventory != null ? oldInventory.getStock() : 0);
+        history.setNewStock(newInventory.getStock());
+        history.setPreviousPrice(oldInventory != null ? oldInventory.getPrice() : 0.0);
+        history.setNewPrice(newInventory.getPrice());
+        history.setModifiedDate(new Date());
+        history.setModifiedBy(modifiedBy);
+
+        // Track all changed fields
+        if (oldInventory != null) {
+            Map<String, Object> changes = new HashMap<>();
+            if (!Objects.equals(oldInventory.getName(), newInventory.getName())) {
+                changes.put("name", Map.of("old", oldInventory.getName(), "new", newInventory.getName()));
+            }
+            // Add other field comparisons...
+
+            try {
+                history.setChanges(objectMapper.writeValueAsString(changes));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("Failed to serialize changes", e);
+            }
+        }
+
+        historyRepo.save(history);
+    }
+
 }
