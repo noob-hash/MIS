@@ -76,23 +76,13 @@ public class CustomFormController {
       ObjectMapper objectMapper = new ObjectMapper();
       String formConfig = objectMapper.writeValueAsString(formData.get("formConfig"));
 
-      // Check if the form already exists for the given entityType and formName
-      Optional<CustomFormData> existingForm = service.getForm(entityType, formName);
-      CustomFormData customForm;
-      if (existingForm.isPresent()) {
-        // If the form exists, update it
-        customForm = existingForm.get();
-        customForm.setFormConfig(formConfig);
-      } else {
-        // If the form does not exist, create a new one
-        customForm = new CustomFormData();
-        customForm.setEntityType(entityType);
-        customForm.setFormName(formName);
-        customForm.setFormConfig(formConfig);
-      }
 
-      // Save or update the form
-      service.saveCustomFormData(customForm);
+      CustomFormData customForm = new CustomFormData();
+      customForm.setEntityType(entityType);
+      customForm.setFormName(formName);
+      customForm.setFormConfig(formConfig);
+
+      CustomFormData savedForm = service.saveCustomFormData(customForm);
       return ResponseEntity.ok("Form processed successfully!");
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST)

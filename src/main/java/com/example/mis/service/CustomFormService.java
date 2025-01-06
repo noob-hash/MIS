@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.example.mis.entity.CustomFormData;
 import com.example.mis.repo.CustomFormRepo;
 
+import jakarta.persistence.Cacheable;
+
 @Service
 public class CustomFormService {
   @Autowired
@@ -23,6 +25,19 @@ public class CustomFormService {
   }
 
   public CustomFormData saveCustomFormData(CustomFormData customFormData) {
+    // Check if form exists with same entityType and formName
+    Optional<CustomFormData> existingForm = customFormRepo.findByEntityTypeAndFormName(
+        customFormData.getEntityType(),
+        customFormData.getFormName());
+
+    if (existingForm.isPresent()) {
+      // Update existing form
+      CustomFormData form = existingForm.get();
+      form.setFormConfig(customFormData.getFormConfig());
+      return customFormRepo.save(form);
+    }
+
+    // Create new if doesn't exist
     return customFormRepo.save(customFormData);
   }
 
@@ -36,6 +51,18 @@ public class CustomFormService {
 
   public void deleteForm(Long id) {
     customFormRepo.deleteById(id);
+  }
+
+  // Add specific update method if needed
+  public CustomFormData updateForm(Long id, CustomFormData updatedForm) {
+    CustomFormData existingForm = customFormRepo.findById(id)
+        .orElseThrow(() -> new RuntimeException("Form not found with id: " + id));
+
+    existingForm.setEntityType(updatedForm.getEntityType());
+    existingForm.setFormName(updatedForm.getFormName());
+    existingForm.setFormConfig(updatedForm.getFormConfig());
+
+    return customFormRepo.save(existingForm);
   }
 
 }
