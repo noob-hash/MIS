@@ -34,7 +34,7 @@ public class OrdersController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/save")
     public Orders createOrders(@RequestBody Orders order) {
         return orderService.createOrUpdateOrders(order);
     }
@@ -58,4 +58,11 @@ public class OrdersController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @DeleteMapping("/bulk-delete")
+    public ResponseEntity<Void> deleteOrdersBulk(@RequestBody List<Long> ids) {
+        orderService.deleteOrdersBulk(ids);
+        return ResponseEntity.noContent().build();
+    }
+
 }

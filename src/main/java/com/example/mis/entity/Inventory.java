@@ -8,6 +8,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -52,22 +56,25 @@ public class Inventory {
     @Column(nullable = false)
     private Integer reorder;
 
-    @Column(nullable = false)
+    // @Column(nullable = false)
     private LocalDate expiryDate;
 
     @Column(nullable = false)
     private String manufacturer;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String batchNumber;
 
     @Column(nullable = false)
     private String category;
 
-    @Column(nullable = false)
+    // @Column(nullable = false)
     private String storageConditions;
 
-    @Column(nullable = false)
+    // @Column(nullable = false)
+    // private String image;
+    @Lob
+    @Column(columnDefinition = "BLOB")
     private String image;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -76,16 +83,30 @@ public class Inventory {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedDate;
 
+    @OneToOne
+    @JoinColumn(name = "custom_form_data_id")
+    private CustomFormData customFormData;
+
+    private String customValue; // Stores the actual custom field values as JSON
+
     @PrePersist
     private void onCreate() {
+        if (image != null && image.contains(",")) {
+            image = image.split(",")[1]; // Store only the base64 data without the prefix
+        }
         createdDate = new Date();
         lastUpdatedDate = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
+        if (image != null && image.contains(",")) {
+            image = image.split(",")[1];
+        }
         lastUpdatedDate = new Date();
     }
 
-    public enum ProductType{GOODS, SERVICE};
+    public enum ProductType {
+        GOODS, SERVICE
+    };
 }

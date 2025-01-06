@@ -3,8 +3,6 @@ package com.example.mis.entity;
 import java.util.Date;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -28,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UsersDetails{
+public class UsersDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,13 +35,13 @@ public class UsersDetails{
     private String username;
 
     @Column(nullable = false)
-    @JsonIgnore
+    // @JsonIgnore
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
-    private Set<String> roles; //can be used to seperate admin, supplier, customer
+    private Set<String> roles; // can be used to seperate admin, supplier, customer
 
     @Column(nullable = false)
     private String name;
@@ -53,6 +51,9 @@ public class UsersDetails{
 
     @Column(nullable = false)
     private String address;
+
+    @Column(nullable = true)
+    private String document;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;

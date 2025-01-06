@@ -61,4 +61,11 @@ public class UserService implements UserDetailsService {
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
+
+    // Get users with a specific role
+    public List<UsersDetails> getUsersByRole(String role) {
+        return userRepository.findAll().stream()
+                .filter(user -> user.getRoles().contains(role))
+                .collect(Collectors.toList());
+    }
 }

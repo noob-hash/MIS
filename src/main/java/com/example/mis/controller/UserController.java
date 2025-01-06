@@ -32,9 +32,9 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping
-    public UsersDetails createUser(@PathVariable Long id, @RequestBody UsersDetails user) {
-        return userService.updateUser(id,user);
+    @PostMapping("/save")
+    public UsersDetails createUser(@RequestBody UsersDetails user) {
+        return userService.saveUser(user);
     }
 
     @PutMapping("/{id}")
@@ -44,7 +44,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        if (userService.getUserById(id)!=null) {
+        if (userService.getUserById(id) != null) {
             userService.deleteUser(id);
             return ResponseEntity.noContent().build();
         }

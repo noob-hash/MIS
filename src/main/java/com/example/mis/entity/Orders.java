@@ -67,4 +67,8 @@ public class Orders {
         lastUpdatedDate = new Date();
     }
 
+    public void addOrderItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
+    }
 }
