@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -33,8 +35,6 @@ public class Orders {
 
     @Column(nullable = false)
     private Long supplierId;
-    // @Lazy
-    // private User supplierId;
 
     @Column(nullable = false)
     private LocalDate orderDate;
@@ -42,13 +42,14 @@ public class Orders {
     @Column(nullable = false)
     private String status;
 
-    // @OneToMany(cascade = CascadeType.ALL, mappedBy = "sales")
-    // private List<OrderItem> items;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "order")
     private List<OrderItem> items;
 
     private Double totalAmount;
+
+    @ManyToOne
+    @JoinColumn(name = "custom_form_data_id")
+    private CustomFormData customFormData;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;

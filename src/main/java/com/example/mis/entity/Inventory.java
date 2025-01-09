@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -83,7 +82,7 @@ public class Inventory {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedDate;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "custom_form_data_id")
     private CustomFormData customFormData;
 

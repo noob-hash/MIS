@@ -42,10 +42,6 @@ public class InventoryHistory {
   @Column(nullable = false)
   private Double newPrice;
 
-  @Lob
-  @Column
-  private String changes; // Store JSON of all changed fields
-
   @Column(nullable = false)
   private Date modifiedDate;
 

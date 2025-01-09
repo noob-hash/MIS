@@ -19,7 +19,6 @@ import org.springframework.web.filter.CorsFilter;
 
 import com.example.mis.service.UserService;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

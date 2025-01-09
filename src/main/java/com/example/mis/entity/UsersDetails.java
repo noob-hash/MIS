@@ -1,17 +1,17 @@
 package com.example.mis.entity;
 
 import java.util.Date;
-import java.util.Set;
 
-import jakarta.persistence.CollectionTable;
+import com.example.mis.enums.UserRole;
+
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -38,18 +38,20 @@ public class UsersDetails {
     // @JsonIgnore
     private String password;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Column(name = "role")
-    private Set<String> roles; // can be used to seperate admin, supplier, customer
+    @Column(nullable = false)
+    private UserRole role;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private String contact;
+    private String orgName;
 
     @Column(nullable = false)
+    private String contact;
+
+    private String emailAddress;
+
     private String address;
 
     @Column(nullable = true)
@@ -58,17 +60,33 @@ public class UsersDetails {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdDate;
 
+    @Lob
+    @Column(columnDefinition = "BLOB")
+    private String image; // Base64 encoded image data
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdatedDate;
 
+    @ManyToOne
+    @JoinColumn(name = "custom_form_data_id")
+    private CustomFormData customFormData;
+
+    private String customValue; // Stores the actual custom field values as JSON
+
     @PrePersist
     private void onCreate() {
+        if (image != null && image.contains(",")) {
+            image = image.split(",")[1]; // Store only base64 data
+        }
         createdDate = new Date();
         lastUpdatedDate = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
+        if (image != null && image.contains(",")) {
+            image = image.split(",")[1];
+        }
         lastUpdatedDate = new Date();
     }
 }

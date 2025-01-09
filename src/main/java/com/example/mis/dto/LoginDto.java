@@ -13,4 +13,5 @@ public class LoginDto {
     private String username;
     @NotBlank(message = "This field is required")
     private String password;
+    private String role;
 }
