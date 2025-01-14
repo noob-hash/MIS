@@ -49,7 +49,10 @@ public class AuthService {
   public UsersDetails authenticate(@Valid LoginDto loginDto) {
     try {
 
-      UsersDetails user = userRepository.findByUsername(loginDto.getUsername())
+      // UsersDetails user = userRepository.findByUsername(loginDto.getUsername())
+      // .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
+
+      UsersDetails user = userRepository.findByEmailAddress(loginDto.getEmail())
           .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
       if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
         throw new BadCredentialsException("Invalid credentials");
@@ -79,11 +82,6 @@ public class AuthService {
     if (userRepository.findByEmailAddress(userData.getEmailAddress()).isPresent()) {
       throw new IllegalArgumentException("Email already exists");
     }
-
-    // Validate unique username
-    // if (userRepository.findByUsername(userData.getUsername()).isPresent()) {
-    // throw new IllegalArgumentException("Username already exists");
-    // }
 
     // Validate role
     if (userData.getRole() == UserRole.SUPER_ADMIN) {

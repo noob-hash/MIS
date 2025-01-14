@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginDto {
     @NotBlank(message = "This field is required")
+    private String email;
+
+    @NotBlank(message = "This field is required")
     private String username;
     @NotBlank(message = "This field is required")
     private String password;
