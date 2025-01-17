@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.mis.dto.LoginDto;
 import com.example.mis.dto.OtpRequestDto;
 import com.example.mis.dto.OtpVerificationDto;
+import com.example.mis.dto.RegisterDto;
 import com.example.mis.entity.UsersDetails;
 import com.example.mis.service.AuthService;
 
@@ -23,7 +24,6 @@ public class AuthController {
 
     @Autowired
     AuthService authService;
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDto loginDto) {
@@ -39,9 +39,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UsersDetails userData) {
+    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
         try {
-            UsersDetails registeredUser = authService.register(userData);
+            UsersDetails registeredUser = authService.register(registerDto.toUserDetails());
             return ResponseEntity.ok(registeredUser);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());

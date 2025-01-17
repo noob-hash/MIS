@@ -1,63 +1,65 @@
-// package com.example.mis.config;
+package com.example.mis.config;
 
-// import com.example.mis.entity.UsersDetails;
-// import com.example.mis.repo.UserRepo;
-// import org.springframework.boot.CommandLineRunner;
-// import org.springframework.security.crypto.password.PasswordEncoder;
-// import org.springframework.stereotype.Component;
+import com.example.mis.entity.UsersDetails;
+import com.example.mis.enums.UserRole;
+import com.example.mis.repo.UserRepo;
 
-// import java.util.HashSet;
-// import java.util.Set;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
-// @Component
-// public class UserDataInitializer implements CommandLineRunner {
+import java.util.HashSet;
+import java.util.Set;
 
-// private final UserRepo usersDetailsRepository;
-// private final PasswordEncoder passwordEncoder;
+@Component
+public class UserDataInitializer implements CommandLineRunner {
 
-// // Constructor Injection of UserRepo and PasswordEncoder
-// public UserDataInitializer(UserRepo usersDetailsRepository, PasswordEncoder
-// passwordEncoder) {
-// this.usersDetailsRepository = usersDetailsRepository;
-// this.passwordEncoder = passwordEncoder;
-// }
+  private final UserRepo usersDetailsRepository;
+  private final PasswordEncoder passwordEncoder;
 
-// @Override
-// public void run(String... args) throws Exception {
-// // Check if data already exists
-// if (usersDetailsRepository.count() == 0) {
-// // Initialize admin user with roles
-// Set<String> adminRoles = new HashSet<>();
-// adminRoles.add("ROLE_ADMIN");
-// adminRoles.add("ROLE_SUPPLIER");
+  // Constructor Injection of UserRepo and PasswordEncoder
+  public UserDataInitializer(UserRepo usersDetailsRepository, PasswordEncoder passwordEncoder) {
+    this.usersDetailsRepository = usersDetailsRepository;
+    this.passwordEncoder = passwordEncoder;
+  }
 
-// UsersDetails adminUser = new UsersDetails();
-// adminUser.setUsername("admin");
-// adminUser.setPassword(passwordEncoder.encode("admin123")); // Encrypting the
-// // password
-// adminUser.setUserRoles(adminRoles);
-// adminUser.setName("Admin User");
-// adminUser.setContact("1234567890");
-// adminUser.setAddress("123 Admin Street");
-// adminUser.setDocument("admin-doc123");
+  @Override
+  public void run(String... args) throws Exception {
+    // Check if data already exists
+    if (usersDetailsRepository.count() == 0) {
+      // Initialize admin user with roles
+      Set<String> adminRoles = new HashSet<>();
+      adminRoles.add("ROLE_ADMIN");
+      adminRoles.add("ROLE_SUPPLIER");
 
-// usersDetailsRepository.save(adminUser);
+      UsersDetails adminUser = new UsersDetails();
+      adminUser.setUsername("admin");
+      adminUser.setPassword(passwordEncoder.encode("admin123")); // Encrypting the
+      // password
+      adminUser.setRole(UserRole.SUPER_ADMIN);
+      adminUser.setName("Admin User");
+      adminUser.setContact("1234567890");
+      adminUser.setAddress("123 Admin Street");
+      adminUser.setDocument("admin-doc123");
+      adminUser.setOrgName("ORG");
 
-// // Initialize another user with different roles (e.g., customer)
-// Set<String> customerRoles = new HashSet<>();
-// customerRoles.add("CUSTOMER");
+      usersDetailsRepository.save(adminUser);
 
-// UsersDetails customerUser = new UsersDetails();
-// customerUser.setUsername("customer");
-// customerUser.setPassword(passwordEncoder.encode("customer123")); //
-// Encrypting the password
-// customerUser.setUserRoles(customerRoles);
-// customerUser.setName("Customer User");
-// customerUser.setContact("0987654321");
-// customerUser.setAddress("456 Customer Avenue");
-// customerUser.setDocument("customer-doc123");
+      // Initialize another user with different roles (e.g., customer)
+      Set<String> customerRoles = new HashSet<>();
+      customerRoles.add("CUSTOMER");
 
-// usersDetailsRepository.save(customerUser);
-// }
-// }
-// }
+      UsersDetails customerUser = new UsersDetails();
+      customerUser.setUsername("customer");
+      customerUser.setPassword(passwordEncoder.encode("customer123"));
+      customerUser.setRole(UserRole.ROLE_ADMIN);
+      customerUser.setName("Customer User");
+      customerUser.setContact("0987654321");
+      customerUser.setAddress("456 Customer Avenue");
+      customerUser.setDocument("customer-doc123");
+      customerUser.setOrgName("ORG");
+
+      usersDetailsRepository.save(customerUser);
+    }
+  }
+}

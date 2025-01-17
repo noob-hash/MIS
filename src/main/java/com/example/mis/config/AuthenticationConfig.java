@@ -33,11 +33,12 @@ public class AuthenticationConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // .requestMatchers("/mis/login", "/mis/register").permitAll()
+                        .requestMatchers("/mis/login", "/mis/register").permitAll()
                         .requestMatchers("/mis/auth/**").permitAll()
                         // .requestMatchers("/mis/**").permitAll()
                         .requestMatchers("/mis/supplier/**").hasAnyRole("SUPPLIER", "ADMIN", "SUPER_ADMIN")
-                        .requestMatchers("/mis/order/**").hasAnyRole("SUPPLIER", "ADMIN", "SUPER_ADMIN")
+                        // .requestMatchers("/mis/order/**").hasAnyRole("SUPPLIER", "ADMIN",
+                        // "SUPER_ADMIN")
                         .requestMatchers("/mis/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated())
                 .httpBasic(basic -> basic

@@ -48,7 +48,7 @@ public class UsersDetails {
     @Column(nullable = false)
     private String orgName;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String contact;
 
     private String emailAddress;

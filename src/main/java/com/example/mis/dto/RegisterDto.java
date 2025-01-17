@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
-public class RegistrationDto {
+public class RegisterDto {
 
   @NotBlank(message = "Username is required")
   @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
@@ -22,10 +22,16 @@ public class RegistrationDto {
 
   @NotBlank(message = "Email is required")
   @Email(message = "Invalid email format")
-  private String email;
+  private String emailAddress;
 
   @NotBlank(message = "Name is required")
   private String name;
+
+  @NotBlank(message = "Address is required")
+  private String address;
+
+  @NotNull(message = "Company  is required")
+  private String orgName;
 
   @NotNull(message = "Role is required")
   private UserRole role;
@@ -34,8 +40,10 @@ public class RegistrationDto {
     UsersDetails user = new UsersDetails();
     user.setUsername(username);
     user.setPassword(password);
-    user.setEmailAddress(email);
+    user.setEmailAddress(emailAddress);
     user.setName(name);
+    user.setAddress(address);
+    user.setOrgName(orgName);
     user.setRole(role);
     return user;
   }

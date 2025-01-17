@@ -33,7 +33,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     private ObjectMapper objectMapper;
 
-
     private PasswordEncoder passwordEncoder;
 
     @Override
