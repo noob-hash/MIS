@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +55,7 @@ public class AuthService {
 
       UsersDetails user = userRepository.findByEmailAddress(loginDto.getEmail())
           .orElseThrow(() -> new BadCredentialsException("Invalid credentials"));
+
       if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
         throw new BadCredentialsException("Invalid credentials");
       }
@@ -72,7 +74,7 @@ public class AuthService {
 
   }
 
-  public UsersDetails register(@Valid UsersDetails userData) {
+  public UsersDetails register(@Valid UsersDetails userData) throws UsernameNotFoundException {
     // Validate password strength
     if (!isPasswordStrong(userData.getPassword())) {
       throw new IllegalArgumentException(

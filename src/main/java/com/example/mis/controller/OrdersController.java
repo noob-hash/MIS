@@ -58,6 +58,12 @@ public class OrdersController {
         return ResponseEntity.ok(new ApiResponse<>(true, "Order retrieved successfully", order));
     }
 
+    @GetMapping("/ordersReport")
+    public ResponseEntity<List<Map<String, Object>>> getOrderReport() {
+        List<Map<String, Object>> report = orderService.generateOrderReport();
+        return ResponseEntity.ok(report);
+    }
+
     @PostMapping("/save")
     public Orders createOrders(@RequestBody Orders order) {
         return orderService.createOrUpdateOrders(order);

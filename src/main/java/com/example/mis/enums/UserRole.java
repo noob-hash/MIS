@@ -1,9 +1,9 @@
 package com.example.mis.enums;
 
 public enum UserRole {
-  ADMIN("Admin"),
-  SUPPLIER("Supplier"),
-  SUPER_ADMIN("SuperAdmin");
+  ROLE_ADMIN("ROLE_ADMIN"),
+  SUPPLIER("ROLE_SUPPLIER"),
+  SUPER_ADMIN("ROLE_SUPPER_ADMIN");
   // CUSTOMER("Customer"),
   // EMPLOYEE("Employee");
 

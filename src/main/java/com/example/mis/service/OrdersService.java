@@ -2,7 +2,9 @@ package com.example.mis.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,4 +152,53 @@ public class OrdersService {
     public void deleteOrdersBulk(List<Long> ids) {
         orderRepository.deleteAllById(ids);
     }
+
+    public List<Map<String, Object>> generateOrderReport() {
+    try {
+        List<Orders> orders = orderRepository.findAll();
+        
+        // Aggregate report data
+        return orders.stream().map(order -> {
+            Map<String, Object> reportData = new HashMap<>();
+            reportData.put("Order ID", order.getId());
+            reportData.put("Order Date", order.getOrderDate());
+            reportData.put("Last Updated Date", order.getLastUpdatedDate());
+            reportData.put("Status", order.getStatus());
+
+            // Supplier Details
+            UsersDetails supplier = userRepository.findById(order.getSupplierId())
+                    .orElseThrow(() -> new ResponseStatusException(
+                            HttpStatus.NOT_FOUND, 
+                            "Supplier not found for order ID: " + order.getId()
+                    ));
+            reportData.put("Supplier Name", supplier.getName());
+            reportData.put("Supplier Organization", supplier.getOrgName());
+            reportData.put("Supplier Contact", supplier.getContact());
+
+            // Order Items
+            List<Map<String, Object>> items = order.getItems().stream().map(item -> {
+                Inventory inventory = inventoryRepository.findById(item.getItemId())
+                        .orElseThrow(() -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND, 
+                                "Inventory item not found for item ID: " + item.getItemId()
+                        ));
+                Map<String, Object> itemData = new HashMap<>();
+                itemData.put("Item Name", inventory.getName());
+                itemData.put("Quantity", item.getQuantity());
+                itemData.put("Price Per Unit", item.getPrice());
+                itemData.put("Total Price", item.getQuantity() * item.getPrice());
+                return itemData;
+            }).collect(Collectors.toList());
+            reportData.put("Items", items);
+
+            // Total Amount
+            reportData.put("Total Amount", order.getTotalAmount());
+
+            return reportData;
+        }).collect(Collectors.toList());
+    } catch (Exception e) {
+        throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error generating report");
+    }
+}
+
 }

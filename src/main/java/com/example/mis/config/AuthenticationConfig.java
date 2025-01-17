@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -33,9 +33,15 @@ public class AuthenticationConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/mis/login", "/mis/register").permitAll()
+                        // .requestMatchers("/mis/login", "/mis/register").permitAll()
+                        .requestMatchers("/mis/auth/**").permitAll()
+                        // .requestMatchers("/mis/**").permitAll()
+                        .requestMatchers("/mis/supplier/**").hasAnyRole("SUPPLIER", "ADMIN", "SUPER_ADMIN")
+                        .requestMatchers("/mis/order/**").hasAnyRole("SUPPLIER", "ADMIN", "SUPER_ADMIN")
+                        .requestMatchers("/mis/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic(basic -> basic
+                        .authenticationEntryPoint(authenticationEntryPoint()));
 
         return http.build();
     }
@@ -56,6 +62,13 @@ public class AuthenticationConfig {
                 .getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(userService).passwordEncoder(passwordEncoder());
         return authenticationManagerBuilder.build();
+    }
+
+    @Bean
+    public BasicAuthenticationEntryPoint authenticationEntryPoint() {
+        BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
+        entryPoint.setRealmName("Medical Inventory System");
+        return entryPoint;
     }
 
     @Bean

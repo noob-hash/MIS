@@ -28,14 +28,14 @@
 // if (usersDetailsRepository.count() == 0) {
 // // Initialize admin user with roles
 // Set<String> adminRoles = new HashSet<>();
-// adminRoles.add("ADMIN");
-// adminRoles.add("SUPPLIER");
+// adminRoles.add("ROLE_ADMIN");
+// adminRoles.add("ROLE_SUPPLIER");
 
 // UsersDetails adminUser = new UsersDetails();
 // adminUser.setUsername("admin");
 // adminUser.setPassword(passwordEncoder.encode("admin123")); // Encrypting the
-// password
-// adminUser.setRoles(adminRoles);
+// // password
+// adminUser.setUserRoles(adminRoles);
 // adminUser.setName("Admin User");
 // adminUser.setContact("1234567890");
 // adminUser.setAddress("123 Admin Street");
@@ -51,7 +51,7 @@
 // customerUser.setUsername("customer");
 // customerUser.setPassword(passwordEncoder.encode("customer123")); //
 // Encrypting the password
-// customerUser.setRoles(customerRoles);
+// customerUser.setUserRoles(customerRoles);
 // customerUser.setName("Customer User");
 // customerUser.setContact("0987654321");
 // customerUser.setAddress("456 Customer Avenue");

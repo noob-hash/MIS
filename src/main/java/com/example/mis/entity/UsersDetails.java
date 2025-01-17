@@ -3,6 +3,7 @@ package com.example.mis.entity;
 import java.util.Date;
 
 import com.example.mis.enums.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +36,7 @@ public class UsersDetails {
     private String username;
 
     @Column(nullable = false)
-    // @JsonIgnore
+    @JsonIgnore
     private String password;
 
     @Column(nullable = false)
